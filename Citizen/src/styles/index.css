@@ -1022,7 +1022,7 @@ button, input, select, textarea {
   margin-top: 14px;
 }
 
-/* Auth Screens Styling (Welcome, Login, Aadhaar Mock OTP, Registration) */
+/* Auth Screens Styling (Welcome, Login, ABHA Mock OTP, Registration) */
 .auth-hero-onboarding {
   padding: 30px 24px;
   text-align: center;

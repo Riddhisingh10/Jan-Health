@@ -1,8 +1,8 @@
 export interface CitizenProfile {
   name: string;
   nameHindi?: string;
-  aadhaarNumber: string;
-  maskedAadhaar: string;
+  abhaNumber: string;
+  abhaAddress: string;
   healthId: string;
   phone: string;
   age: number;

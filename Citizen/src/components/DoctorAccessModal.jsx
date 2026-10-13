@@ -17,7 +17,7 @@ export function DoctorAccessModal({ user, onClose, language }) {
   const [pin, setPin] = useState(user.doctorPin || '8492');
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(`Patient Health ID: ${user.healthId}, Doctor Access PIN: ${pin}`);
+    navigator.clipboard.writeText(`Patient ABHA: ${user.abhaNumber || '14-8492-3847-1920'} (${user.abhaAddress || 'ramesh.sharma@abdm'}), Doctor Access PIN: ${pin}`);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -69,10 +69,10 @@ export function DoctorAccessModal({ user, onClose, language }) {
           </div>
 
           <div style={{ fontSize: '13px', fontWeight: '700', color: 'var(--text-main)' }}>
-            Health ID: <span style={{ color: 'var(--primary-teal)' }}>{user.healthId}</span>
+            ABHA: <span style={{ color: 'var(--primary-teal)' }}>{user.abhaNumber || '14-8492-3847-1920'}</span>
           </div>
           <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>
-            Aadhaar Ref: {user.maskedAadhaar}
+            ABHA Address: {user.abhaAddress || 'ramesh.sharma@abdm'} • Health ID: {user.healthId}
           </div>
 
           <div style={{ margin: '16px auto 8px', display: 'inline-flex', padding: '10px', background: '#f8fafc', borderRadius: '16px', border: '1px solid var(--border-subtle)' }}>

@@ -19,27 +19,37 @@ export function Auth({ onLoginSuccess, language, setLanguage }) {
   const [mode, setMode] = useState('login'); // 'login' | 'register'
   const [step, setStep] = useState('input'); // 'input' | 'otp'
   
-  // Registration / Login Inputs
-  const [aadhaar, setAadhaar] = useState('5481 9238 4819');
+  // Registration / Login Inputs (ABHA - Ayushman Bharat Health Account)
+  const [abhaNumber, setAbhaNumber] = useState('14-8492-3847-1920');
   const [name, setName] = useState('Ramesh Chandra Sharma');
   const [mobile, setMobile] = useState('9876543210');
   const [otp, setOtp] = useState('123456');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Format Aadhaar with spaces
-  const handleAadhaarChange = (e) => {
-    let raw = e.target.value.replace(/\D/g, '').slice(0, 12);
-    let formatted = raw.replace(/(\d{4})(?=\d)/g, '$1 ');
-    setAadhaar(formatted);
+  // Format 14-digit ABHA Number (XX-XXXX-XXXX-XXXX)
+  const handleAbhaChange = (e) => {
+    let val = e.target.value;
+    // Allow ABHA address with @abdm or format digits
+    if (val.includes('@')) {
+      setAbhaNumber(val.toLowerCase());
+    } else {
+      let raw = val.replace(/\D/g, '').slice(0, 14);
+      let formatted = '';
+      if (raw.length > 0) formatted += raw.slice(0, 2);
+      if (raw.length > 2) formatted += '-' + raw.slice(2, 6);
+      if (raw.length > 6) formatted += '-' + raw.slice(6, 10);
+      if (raw.length > 10) formatted += '-' + raw.slice(10, 14);
+      setAbhaNumber(formatted || raw);
+    }
     setError('');
   };
 
   const handleSendOtp = (e) => {
     e.preventDefault();
-    const rawAadhaar = aadhaar.replace(/\s/g, '');
-    if (rawAadhaar.length < 12) {
-      setError(language === 'hi' ? 'कृपया पूरा 12 अंकों का आधार नंबर दर्ज करें' : 'Please enter valid 12-digit Aadhaar number');
+    const clean = abhaNumber.trim();
+    if (!clean || clean.length < 5) {
+      setError(language === 'hi' ? 'कृपया सही 14-अंकीय आभा (ABHA) नंबर या ABHA पता दर्ज करें' : 'Please enter a valid 14-digit ABHA Number or ABHA Address (@abdm)');
       return;
     }
     if (mode === 'register' && !name.trim()) {
@@ -58,19 +68,18 @@ export function Auth({ onLoginSuccess, language, setLanguage }) {
   const handleVerifyOtp = (e) => {
     e.preventDefault();
     if (otp !== '123456') {
-      setError(language === 'hi' ? 'गलत OTP! डेमो के लिए 123456 दर्ज करें' : 'Incorrect OTP! For prototype demo, use 123456');
+      setError(language === 'hi' ? 'गलत OTP! प्रोटोटाइप डेमो के लिए 123456 दर्ज करें' : 'Incorrect OTP! For prototype demo, use 123456');
       return;
     }
 
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      const rawAadhaar = aadhaar.replace(/\s/g, '');
       const userProfile = {
         ...CITIZEN_PROFILE,
         name: mode === 'register' ? name : CITIZEN_PROFILE.name,
-        aadhaarNumber: aadhaar,
-        maskedAadhaar: `XXXX-XXXX-${rawAadhaar.slice(-4)}`
+        abhaNumber: abhaNumber.includes('@') ? CITIZEN_PROFILE.abhaNumber : abhaNumber,
+        abhaAddress: abhaNumber.includes('@') ? abhaNumber : `${name.toLowerCase().replace(/\s+/g, '.')}@abdm`
       };
       onLoginSuccess(userProfile);
     }, 600);
@@ -90,7 +99,7 @@ export function Auth({ onLoginSuccess, language, setLanguage }) {
               Jan Health
             </h1>
             <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: '600' }}>
-              {language === 'hi' ? 'नागरिक स्वास्थ्य पोर्टल' : 'Citizens Medical Records'}
+              {language === 'hi' ? 'आयुष्मान भारत डिजिटल हेल्थ मिशन' : 'Ayushman Bharat Digital Health Portal'}
             </span>
           </div>
         </div>
@@ -122,7 +131,7 @@ export function Auth({ onLoginSuccess, language, setLanguage }) {
               boxShadow: mode === 'login' ? '0 2px 6px rgba(0,0,0,0.06)' : 'none'
             }}
           >
-            {language === 'hi' ? 'आधार से लॉगिन' : 'Log In'}
+            {language === 'hi' ? 'ABHA से लॉगिन' : 'Log In via ABHA'}
           </button>
           <button
             onClick={() => { setMode('register'); setStep('input'); setError(''); }}
@@ -138,17 +147,17 @@ export function Auth({ onLoginSuccess, language, setLanguage }) {
               boxShadow: mode === 'register' ? '0 2px 6px rgba(0,0,0,0.06)' : 'none'
             }}
           >
-            {language === 'hi' ? 'नया खाता बनाएं' : 'New Account'}
+            {language === 'hi' ? 'नया ABHA खाता' : 'Create ABHA'}
           </button>
         </div>
 
-        {/* Demo Hint Banner */}
+        {/* ABDM Ayushman Bharat Banner */}
         <div style={{ background: '#f0fdfa', border: '1px solid #99f6e4', borderRadius: '12px', padding: '10px 12px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: 'var(--primary-teal-darker)' }}>
           <Sparkles size={16} color="var(--primary-teal)" flexShrink={0} />
           <span>
             {language === 'hi' 
-              ? 'मॉक डेमो: आधार नंबर और OTP (123456) पहले से भरा है।' 
-              : 'Demo Mode: Aadhaar and Mock OTP (123456) are pre-filled.'}
+              ? 'आयुष्मान भारत हेल्थ अकाउंट (ABHA) आधारित लॉगिन। डेमो OTP: 123456' 
+              : 'Ayushman Bharat Health Account (ABHA) Login. Demo Mock OTP: 123456'}
           </span>
         </div>
 
@@ -157,7 +166,7 @@ export function Auth({ onLoginSuccess, language, setLanguage }) {
             {mode === 'register' && (
               <div style={{ marginBottom: '14px' }}>
                 <label className="form-label">
-                  {language === 'hi' ? 'नागरिक का पूरा नाम (Full Name)' : 'Citizen Full Name'}
+                  {language === 'hi' ? 'नागरिक का पूरा नाम' : 'Citizen Full Legal Name'}
                 </label>
                 <div style={{ position: 'relative' }}>
                   <input
@@ -176,26 +185,29 @@ export function Auth({ onLoginSuccess, language, setLanguage }) {
 
             <div style={{ marginBottom: '14px' }}>
               <label className="form-label">
-                {language === 'hi' ? '12-अंकों का आधार नंबर' : '12-Digit Aadhaar Number'}
+                {language === 'hi' ? '14-अंकीय ABHA नंबर या ABHA पता (@abdm)' : '14-Digit ABHA Number or ABHA Address (@abdm)'}
               </label>
               <div style={{ position: 'relative' }}>
                 <input
                   type="text"
                   className="form-input"
-                  value={aadhaar}
-                  onChange={handleAadhaarChange}
-                  placeholder="XXXX XXXX XXXX"
+                  value={abhaNumber}
+                  onChange={handleAbhaChange}
+                  placeholder="e.g. 14-8492-3847-1920 or ramesh@abdm"
                   required
-                  style={{ paddingLeft: '38px', marginBottom: 0, letterSpacing: '1px', fontWeight: '700' }}
+                  style={{ paddingLeft: '38px', marginBottom: 0, letterSpacing: '0.5px', fontWeight: '700' }}
                 />
                 <CreditCard size={16} style={{ position: 'absolute', left: '12px', top: '15px', color: 'var(--text-muted)' }} />
               </div>
+              <span style={{ fontSize: '11px', color: 'var(--text-muted)', display: 'block', marginTop: '4px' }}>
+                {language === 'hi' ? 'आयुष्मान भारत स्वास्थ्य खाता (ABHA) संख्या' : 'Ayushman Bharat Health Account (ABDM compliant)'}
+              </span>
             </div>
 
             {mode === 'register' && (
               <div style={{ marginBottom: '14px' }}>
                 <label className="form-label">
-                  {language === 'hi' ? 'मोबाइल नंबर (OTP हेतु)' : 'Mobile Number (For Verification)'}
+                  {language === 'hi' ? 'ABHA से जुड़ा मोबाइल नंबर' : 'Mobile Linked with ABHA'}
                 </label>
                 <div style={{ position: 'relative' }}>
                   <input
@@ -226,10 +238,10 @@ export function Auth({ onLoginSuccess, language, setLanguage }) {
               disabled={loading}
             >
               {loading ? (
-                <span>Sending OTP...</span>
+                <span>Sending ABHA OTP...</span>
               ) : (
                 <>
-                  <span>{language === 'hi' ? 'OTP प्राप्त करें' : 'Get Verification OTP'}</span>
+                  <span>{language === 'hi' ? 'ABHA OTP प्राप्त करें' : 'Get ABHA Verification OTP'}</span>
                   <ArrowRight size={16} />
                 </>
               )}
@@ -240,16 +252,16 @@ export function Auth({ onLoginSuccess, language, setLanguage }) {
           <form onSubmit={handleVerifyOtp}>
             <div style={{ textAlign: 'center', marginBottom: '16px' }}>
               <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
-                {language === 'hi' ? 'सत्यापन कोड आधार से जुड़े मोबाइल पर भेजा गया:' : 'Verification OTP sent to mobile for Aadhaar:'}
+                {language === 'hi' ? 'सत्यापन कोड ABHA पंजीकृत मोबाइल पर भेजा गया:' : 'Verification OTP sent to mobile linked with ABHA:'}
               </div>
               <div style={{ fontSize: '15px', fontWeight: '800', color: 'var(--primary-teal-darker)', marginTop: '2px' }}>
-                {aadhaar}
+                {abhaNumber}
               </div>
             </div>
 
             <div style={{ marginBottom: '16px' }}>
               <label className="form-label" style={{ textAlign: 'center' }}>
-                {language === 'hi' ? '6-अंकीय OTP दर्ज करें (मॉक: 123456)' : 'Enter 6-Digit OTP (Mock: 123456)'}
+                {language === 'hi' ? '6-अंकीय ABHA OTP दर्ज करें (मॉक: 123456)' : 'Enter 6-Digit ABHA OTP (Mock: 123456)'}
               </label>
               <input
                 type="text"
@@ -276,7 +288,7 @@ export function Auth({ onLoginSuccess, language, setLanguage }) {
               disabled={loading}
             >
               {loading ? (
-                <span>Verifying...</span>
+                <span>Verifying ABHA...</span>
               ) : (
                 <>
                   <ShieldCheck size={18} />
@@ -290,7 +302,7 @@ export function Auth({ onLoginSuccess, language, setLanguage }) {
               onClick={() => { setStep('input'); setError(''); }}
               style={{ width: '100%', background: 'transparent', border: 'none', color: 'var(--text-muted)', fontSize: '12px', fontWeight: '600', marginTop: '12px', cursor: 'pointer' }}
             >
-              {language === 'hi' ? 'आधार नंबर बदलें' : 'Change Aadhaar Number'}
+              {language === 'hi' ? 'ABHA नंबर बदलें' : 'Change ABHA Number'}
             </button>
           </form>
         )}
@@ -302,8 +314,8 @@ export function Auth({ onLoginSuccess, language, setLanguage }) {
         <ShieldCheck size={16} color="var(--primary-teal)" />
         <span>
           {language === 'hi' 
-            ? 'आपके मेडिकल रिकॉर्ड पूर्णतः सुरक्षित एवं गोपनीय हैं।' 
-            : 'Your medical records are private and encrypted.'}
+            ? 'आयुष्मान भारत डिजिटल मिशन (ABDM) द्वारा सुरक्षित एवं प्रमाणित।' 
+            : 'Compliant with Ayushman Bharat Digital Mission (ABDM).'}
         </span>
       </div>
 

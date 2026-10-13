@@ -136,7 +136,7 @@ export default function CitizensDashboardPage() {
       : MEDICAL_RECORDS.filter(r => r.year === selectedYear).length;
   }, [selectedYear]);
 
-  // If user is logged out, show the simple Aadhaar login/register screen
+  // If user is logged out, show the simple ABHA login/register screen
   if (!user) {
     return (
       <div style={{ background: '#f1f5f9', minHeight: '100vh' }}>
@@ -209,11 +209,11 @@ export default function CitizensDashboardPage() {
                 <h2 style={{ fontSize: '16px', fontWeight: '800', lineHeight: '1.2' }}>
                   {language === 'hi' && user.nameHindi ? user.nameHindi : user.name}
                 </h2>
-                <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.9)', marginTop: '2px' }}>
-                  Health ID: <strong>{user.healthId}</strong>
+                <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.95)', marginTop: '2px' }}>
+                  ABHA: <strong>{user.abhaNumber || '14-8492-3847-1920'}</strong>
                 </div>
-                <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.75)' }}>
-                  Aadhaar: {user.maskedAadhaar} • Registered Since {user.registeredYear}
+                <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.85)' }}>
+                  {user.abhaAddress || 'ramesh.sharma@abdm'} • Registered Since {user.registeredYear}
                 </div>
               </div>
             </div>
@@ -221,7 +221,7 @@ export default function CitizensDashboardPage() {
             <div style={{ textAlign: 'right' }}>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', background: '#dcfce7', color: '#166534', fontSize: '11px', fontWeight: '700', padding: '3px 8px', borderRadius: '12px' }}>
                 <CheckCircle2 size={12} />
-                Aadhaar Active
+                ABHA Active
               </span>
             </div>
           </div>
@@ -244,8 +244,8 @@ export default function CitizensDashboardPage() {
               </h3>
               <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px', lineHeight: '1.4' }}>
                 {language === 'hi'
-                  ? 'नए अस्पताल का डॉक्टर आपका Health ID व 4-अंकीय PIN डालकर आपके सभी विज़िट किए गए अस्पतालों के 2020-2026 के रिकॉर्ड देख सकता है।'
-                  : 'A doctor at any new clinic enters your Health ID & PIN to review your previous treatment history across all hospitals you visited (2020 – 2026).'}
+                  ? 'नए अस्पताल का डॉक्टर आपका ABHA नंबर व 4-अंकीय PIN डालकर आपके सभी विज़िट किए गए अस्पतालों के 2020-2026 के रिकॉर्ड देख सकता है।'
+                  : 'A doctor at any new clinic enters your ABHA Number & PIN to review your previous treatment history across all hospitals you visited (2020 – 2026).'}
               </p>
             </div>
 

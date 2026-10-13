@@ -3,8 +3,8 @@
 export const CITIZEN_PROFILE = {
   name: "Ramesh Chandra Sharma",
   nameHindi: "रमेश चंद्र शर्मा",
-  aadhaarNumber: "5481 9238 4819",
-  maskedAadhaar: "XXXX-XXXX-4819",
+  abhaNumber: "14-8492-3847-1920",
+  abhaAddress: "ramesh.sharma@abdm",
   healthId: "JH-9821-4402",
   phone: "+91 98765 43210",
   age: 52,
