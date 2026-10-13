@@ -230,3 +230,63 @@ export const MEDICAL_RECORDS = [
     verifiedByHospital: true
   }
 ];
+
+export const HEALTH_HISTORY_METRICS = {
+  "Blood Pressure (BP)": {
+    unit: "mmHg",
+    records: [
+      { date: "14 Oct 2026", reading: "128/82 mmHg", hospital: "Fortis Escorts Heart Institute", status: "Normal" },
+      { date: "18 Nov 2025", reading: "130/84 mmHg", hospital: "Max Super Speciality Hospital", status: "Pre-hypertension" },
+      { date: "04 Feb 2024", reading: "126/80 mmHg", hospital: "AIIMS New Delhi", status: "Normal" }
+    ]
+  },
+  "Blood Sugar": {
+    unit: "mg/dL",
+    records: [
+      { date: "22 Sep 2026", reading: "108 mg/dL (Fasting)", hospital: "Jan Seva Health Kendra", status: "Borderline" },
+      { date: "18 Nov 2025", reading: "102 mg/dL (Fasting)", hospital: "Max Super Speciality Hospital", status: "Normal" },
+      { date: "28 Aug 2023", reading: "98 mg/dL (Random)", hospital: "Jan Seva Health Kendra", status: "Normal" }
+    ]
+  },
+  "Heart Rate": {
+    unit: "bpm",
+    records: [
+      { date: "14 Oct 2026", reading: "72 bpm", hospital: "Fortis Escorts Heart Institute", status: "Normal" },
+      { date: "18 Nov 2025", reading: "76 bpm", hospital: "Max Super Speciality Hospital", status: "Normal" },
+      { date: "04 Feb 2024", reading: "70 bpm", hospital: "Fortis Escorts Heart Institute", status: "Normal" }
+    ]
+  },
+  "SpO₂": {
+    unit: "%",
+    records: [
+      { date: "10 Oct 2026", reading: "99%", hospital: "AIIMS New Delhi", status: "Optimal" },
+      { date: "28 Aug 2023", reading: "97%", hospital: "Jan Seva Health Kendra", status: "Normal" },
+      { date: "15 Jan 2022", reading: "98% on room air", hospital: "AIIMS New Delhi", status: "Normal" }
+    ]
+  },
+  "Body Temperature": {
+    unit: "°F",
+    records: [
+      { date: "10 Oct 2026", reading: "98.4 °F", hospital: "AIIMS New Delhi", status: "Normal" },
+      { date: "28 Aug 2023", reading: "101.2 °F", hospital: "Jan Seva Health Kendra", status: "Febrile" },
+      { date: "10 Nov 2020", reading: "98.6 °F", hospital: "Jan Seva Health Kendra", status: "Normal" }
+    ]
+  },
+  "Weight": {
+    unit: "kg",
+    records: [
+      { date: "14 Oct 2026", reading: "72.5 kg", hospital: "Fortis Escorts Heart Institute", status: "Stable" },
+      { date: "18 Nov 2025", reading: "73.8 kg", hospital: "Max Super Speciality Hospital", status: "Stable" },
+      { date: "14 Apr 2021", reading: "75.2 kg", hospital: "Max Super Speciality Hospital", status: "Initial" }
+    ]
+  },
+  "Haemoglobin": {
+    unit: "g/dL",
+    records: [
+      { date: "10 Oct 2026", reading: "14.2 g/dL", hospital: "AIIMS New Delhi", status: "Normal" },
+      { date: "18 Nov 2025", reading: "13.9 g/dL", hospital: "Max Super Speciality Hospital", status: "Normal" },
+      { date: "10 Nov 2020", reading: "14.0 g/dL", hospital: "Jan Seva Health Kendra", status: "Normal" }
+    ]
+  }
+};
+

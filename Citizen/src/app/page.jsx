@@ -21,13 +21,16 @@ import {
   Clock, 
   Filter, 
   Hospital,
-  MapPin
+  MapPin,
+  Menu,
+  X
 } from 'lucide-react';
 
 import { 
   CITIZEN_PROFILE, 
   MEDICAL_RECORDS, 
-  YEARS_LIST 
+  YEARS_LIST,
+  HEALTH_HISTORY_METRICS 
 } from '../data/mockData';
 
 import { Auth } from '../components/Auth';
@@ -45,9 +48,11 @@ export default function CitizensDashboardPage() {
   const [viewGrouping, setViewGrouping] = useState('hospital'); // 'hospital' | 'timeline'
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Modals
+  // Modals & Sidebar
   const [activeRecord, setActiveRecord] = useState(null);
   const [showDoctorPinModal, setShowDoctorPinModal] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [selectedVital, setSelectedVital] = useState('Blood Pressure (BP)');
 
   // Dynamically extract ONLY the hospitals this patient has visited for the selected year
   const visitedHospitalsForSelectedYear = useMemo(() => {
@@ -167,8 +172,16 @@ export default function CitizensDashboardPage() {
               </div>
             </div>
 
-            {/* Language & Logout Controls */}
-            <div style={{ display: 'flex', gap: '8px' }}>
+            {/* Health History Sidebar Trigger, Language & Logout Controls */}
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+              <button
+                onClick={() => setSidebarOpen(true)}
+                title="Open Health History Sidebar"
+                style={{ background: 'rgba(255,255,255,0.22)', border: '1px solid rgba(255,255,255,0.35)', color: '#fff', padding: '5px 12px', borderRadius: '16px', fontSize: '12px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }}
+              >
+                <Menu size={13} />
+                <span>Health History</span>
+              </button>
               <button
                 onClick={() => setLanguage(language === 'en' ? 'hi' : 'en')}
                 style={{ background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.3)', color: '#fff', padding: '5px 10px', borderRadius: '16px', fontSize: '12px', fontWeight: '700', cursor: 'pointer' }}
@@ -742,6 +755,193 @@ export default function CitizensDashboardPage() {
           onClose={() => setShowDoctorPinModal(false)}
           language={language}
         />
+      )}
+
+      {/* Floating Left Edge Button for Quick Sidebar Access */}
+      <button
+        onClick={() => setSidebarOpen(true)}
+        title="Open Health History Sidebar"
+        style={{
+          position: 'fixed',
+          left: 0,
+          top: '50%',
+          transform: 'translateY(-50%)',
+          zIndex: 40,
+          background: 'var(--primary-teal-darker)',
+          color: '#ffffff',
+          border: 'none',
+          borderTopRightRadius: '14px',
+          borderBottomRightRadius: '14px',
+          padding: '12px 6px',
+          boxShadow: '0 4px 16px rgba(0,0,0,0.25)',
+          cursor: 'pointer',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '6px',
+          fontSize: '11px',
+          fontWeight: '700'
+        }}
+      >
+        <Activity size={15} />
+        <span style={{ writingMode: 'vertical-rl', letterSpacing: '1px' }}>
+          Health History
+        </span>
+      </button>
+
+      {/* HEALTH HISTORY SIDEBAR DRAWER */}
+      {sidebarOpen && (
+        <div 
+          style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: 'rgba(4, 47, 46, 0.5)',
+            backdropFilter: 'blur(4px)',
+            zIndex: 100,
+            display: 'flex',
+            justifyContent: 'flex-start',
+            animation: 'fadeIn 0.2s ease'
+          }}
+          onClick={() => setSidebarOpen(false)}
+        >
+          <aside
+            style={{
+              width: '100%',
+              maxWidth: '380px',
+              height: '100%',
+              background: '#ffffff',
+              boxShadow: '6px 0 30px rgba(0, 0, 0, 0.15)',
+              display: 'flex',
+              flexDirection: 'column',
+              padding: '24px 20px',
+              overflowY: 'auto'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Sidebar Top Header */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'var(--primary-teal-surface)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary-teal)' }}>
+                  <Activity size={20} />
+                </div>
+                <div>
+                  <h2 style={{ fontSize: '18px', fontWeight: '800', color: 'var(--text-main)', lineHeight: '1.2' }}>
+                    Health History
+                  </h2>
+                  <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                    {language === 'hi' ? 'स्वास्थ्य इतिहास' : 'Patient Vital Metrics'}
+                  </span>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setSidebarOpen(false)}
+                title="Close sidebar"
+                style={{ border: 'none', background: '#f1f5f9', borderRadius: '50%', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--text-secondary)' }}
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '18px', lineHeight: '1.4' }}>
+              Select a vital measurement below to view your verified readings across hospitals.
+            </p>
+
+            {/* Health History Dropdown in the sidebar */}
+            <div style={{ marginBottom: '20px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: '800', color: 'var(--text-main)', marginBottom: '6px' }}>
+                {language === 'hi' ? 'माप / श्रेणी चुनें (Health History):' : 'Select Health History Vital:'}
+              </label>
+              <select
+                className="form-input"
+                value={selectedVital}
+                onChange={(e) => setSelectedVital(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '12px 14px',
+                  borderRadius: '14px',
+                  border: '1.5px solid var(--primary-teal)',
+                  background: 'var(--primary-teal-surface)',
+                  color: 'var(--primary-teal-darker)',
+                  fontSize: '13px',
+                  fontWeight: '700',
+                  cursor: 'pointer',
+                  marginBottom: 0
+                }}
+              >
+                <option value="Blood Pressure (BP)">Blood Pressure (BP)</option>
+                <option value="Blood Sugar">Blood Sugar</option>
+                <option value="Heart Rate">Heart Rate</option>
+                <option value="SpO₂">SpO₂</option>
+                <option value="Body Temperature">Body Temperature</option>
+                <option value="Weight">Weight</option>
+                <option value="Haemoglobin">Haemoglobin</option>
+              </select>
+            </div>
+
+            {/* Corresponding Health History View: exactly 3 mock records, latest first */}
+            <div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                <span style={{ fontSize: '13px', fontWeight: '800', color: 'var(--text-main)' }}>
+                  {selectedVital}
+                </span>
+                <span style={{ fontSize: '10px', fontWeight: '800', color: 'var(--primary-teal-darker)', background: '#ccfbf1', padding: '2px 8px', borderRadius: '8px' }}>
+                  3 Records (Latest First)
+                </span>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {HEALTH_HISTORY_METRICS[selectedVital]?.records.map((rec, index) => (
+                  <div
+                    key={index}
+                    style={{
+                      background: index === 0 ? 'linear-gradient(180deg, #f0fdfa 0%, #ffffff 100%)' : '#ffffff',
+                      border: index === 0 ? '1.5px solid var(--primary-teal-light)' : '1px solid #e2e8f0',
+                      borderRadius: '16px',
+                      padding: '14px',
+                      boxShadow: index === 0 ? '0 4px 12px rgba(15, 118, 110, 0.08)' : '0 2px 6px rgba(0,0,0,0.02)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '6px'
+                    }}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{
+                        fontSize: '10px',
+                        fontWeight: '800',
+                        padding: '2px 8px',
+                        borderRadius: '8px',
+                        background: index === 0 ? '#dcfce7' : '#f1f5f9',
+                        color: index === 0 ? '#166534' : 'var(--text-muted)'
+                      }}>
+                        {index === 0 ? '● Latest Record' : `Record #${index + 1}`}
+                      </span>
+                      <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <Calendar size={12} />
+                        {rec.date}
+                      </span>
+                    </div>
+
+                    <div style={{ fontSize: '20px', fontWeight: '800', color: 'var(--primary-teal-darker)', margin: '2px 0' }}>
+                      {rec.reading}
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '12px', color: 'var(--text-secondary)' }}>
+                      <Building2 size={13} color="var(--primary-teal)" />
+                      <span style={{ fontWeight: '600' }}>{rec.hospital}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Footer Verification Notice */}
+            <div style={{ marginTop: 'auto', paddingTop: '20px', borderTop: '1px solid #f1f5f9', fontSize: '11px', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <ShieldCheck size={14} color="var(--primary-teal)" />
+              <span>Verified clinical records from connected hospital labs.</span>
+            </div>
+          </aside>
+        </div>
       )}
 
     </div>
