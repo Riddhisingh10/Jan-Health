@@ -881,57 +881,114 @@ export default function CitizensDashboardPage() {
 
             {/* Corresponding Health History View: exactly 3 mock records, latest first */}
             <div>
+              {/* Normal Data Reference Box */}
+              <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '12px 14px', marginBottom: '14px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                  <span style={{ fontSize: '11px', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                    {language === 'hi' ? 'सामान्य मानक स्तर (Normal Target)' : 'Standard Normal Range'}
+                  </span>
+                  <span style={{ fontSize: '11px', fontWeight: '800', color: '#166534', background: '#dcfce7', padding: '2px 8px', borderRadius: '8px' }}>
+                    {HEALTH_HISTORY_METRICS[selectedVital]?.normalRange}
+                  </span>
+                </div>
+                <p style={{ fontSize: '11px', color: 'var(--text-secondary)', lineHeight: '1.4', margin: 0 }}>
+                  {HEALTH_HISTORY_METRICS[selectedVital]?.normalDescription}
+                </p>
+              </div>
+
+              {/* Records Section Header */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
                 <span style={{ fontSize: '13px', fontWeight: '800', color: 'var(--text-main)' }}>
-                  {selectedVital}
+                  {selectedVital} Records
                 </span>
                 <span style={{ fontSize: '10px', fontWeight: '800', color: 'var(--primary-teal-darker)', background: '#ccfbf1', padding: '2px 8px', borderRadius: '8px' }}>
                   3 Records (Latest First)
                 </span>
               </div>
 
+              {/* 3 Records with Variance (How much more or less than normal) */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                {HEALTH_HISTORY_METRICS[selectedVital]?.records.map((rec, index) => (
-                  <div
-                    key={index}
-                    style={{
-                      background: index === 0 ? 'linear-gradient(180deg, #f0fdfa 0%, #ffffff 100%)' : '#ffffff',
-                      border: index === 0 ? '1.5px solid var(--primary-teal-light)' : '1px solid #e2e8f0',
-                      borderRadius: '16px',
-                      padding: '14px',
-                      boxShadow: index === 0 ? '0 4px 12px rgba(15, 118, 110, 0.08)' : '0 2px 6px rgba(0,0,0,0.02)',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: '6px'
-                    }}
-                  >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{
-                        fontSize: '10px',
-                        fontWeight: '800',
-                        padding: '2px 8px',
-                        borderRadius: '8px',
-                        background: index === 0 ? '#dcfce7' : '#f1f5f9',
-                        color: index === 0 ? '#166534' : 'var(--text-muted)'
+                {HEALTH_HISTORY_METRICS[selectedVital]?.records.map((rec, index) => {
+                  const isHigher = rec.varianceType === 'higher';
+
+                  return (
+                    <div
+                      key={index}
+                      style={{
+                        background: index === 0 ? 'linear-gradient(180deg, #f0fdfa 0%, #ffffff 100%)' : '#ffffff',
+                        border: index === 0 ? '1.5px solid var(--primary-teal-light)' : '1px solid #e2e8f0',
+                        borderRadius: '16px',
+                        padding: '14px',
+                        boxShadow: index === 0 ? '0 4px 12px rgba(15, 118, 110, 0.08)' : '0 2px 6px rgba(0,0,0,0.02)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '6px'
+                      }}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{
+                          fontSize: '10px',
+                          fontWeight: '800',
+                          padding: '2px 8px',
+                          borderRadius: '8px',
+                          background: index === 0 ? '#dcfce7' : '#f1f5f9',
+                          color: index === 0 ? '#166534' : 'var(--text-muted)'
+                        }}>
+                          {index === 0 ? '● Latest Record' : `Record #${index + 1}`}
+                        </span>
+                        <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                          <Calendar size={12} />
+                          {rec.date}
+                        </span>
+                      </div>
+
+                      {/* Main Reading & Status */}
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginTop: '2px' }}>
+                        <div style={{ fontSize: '20px', fontWeight: '800', color: 'var(--primary-teal-darker)' }}>
+                          {rec.reading}
+                        </div>
+                        <span style={{
+                          fontSize: '10px',
+                          fontWeight: '700',
+                          padding: '2px 8px',
+                          borderRadius: '8px',
+                          background: isHigher ? '#fef3c7' : '#dcfce7',
+                          color: isHigher ? '#92400e' : '#166534'
+                        }}>
+                          {rec.status}
+                        </span>
+                      </div>
+
+                      {/* Variance Comparison Box: How much more or less numbers */}
+                      <div style={{
+                        background: isHigher ? '#fffbeb' : '#f0fdf4',
+                        border: '1px solid',
+                        borderColor: isHigher ? '#fde68a' : '#bbf7d0',
+                        borderRadius: '10px',
+                        padding: '6px 10px',
+                        fontSize: '11px',
+                        color: isHigher ? '#92400e' : '#166534',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '2px'
                       }}>
-                        {index === 0 ? '● Latest Record' : `Record #${index + 1}`}
-                      </span>
-                      <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        <Calendar size={12} />
-                        {rec.date}
-                      </span>
-                    </div>
+                        <div style={{ fontWeight: '800', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                          <span>{isHigher ? '▲ Difference:' : '✓ Variance:'}</span>
+                          <span>{rec.variance}</span>
+                        </div>
+                        <div style={{ fontSize: '10.5px', color: isHigher ? '#b45309' : '#15803d' }}>
+                          {rec.varianceLabel}
+                        </div>
+                      </div>
 
-                    <div style={{ fontSize: '20px', fontWeight: '800', color: 'var(--primary-teal-darker)', margin: '2px 0' }}>
-                      {rec.reading}
+                      {/* Hospital Location */}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
+                        <Building2 size={13} color="var(--primary-teal)" />
+                        <span style={{ fontWeight: '600' }}>{rec.hospital}</span>
+                      </div>
                     </div>
-
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '12px', color: 'var(--text-secondary)' }}>
-                      <Building2 size={13} color="var(--primary-teal)" />
-                      <span style={{ fontWeight: '600' }}>{rec.hospital}</span>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
 

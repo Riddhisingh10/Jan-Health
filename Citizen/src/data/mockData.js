@@ -234,59 +234,242 @@ export const MEDICAL_RECORDS = [
 export const HEALTH_HISTORY_METRICS = {
   "Blood Pressure (BP)": {
     unit: "mmHg",
+    normalRange: "120/80 mmHg",
+    normalDescription: "Standard normal resting BP is around 120/80 mmHg (Systolic < 120 and Diastolic < 80 mmHg).",
     records: [
-      { date: "14 Oct 2026", reading: "128/82 mmHg", hospital: "Fortis Escorts Heart Institute", status: "Normal" },
-      { date: "18 Nov 2025", reading: "130/84 mmHg", hospital: "Max Super Speciality Hospital", status: "Pre-hypertension" },
-      { date: "04 Feb 2024", reading: "126/80 mmHg", hospital: "AIIMS New Delhi", status: "Normal" }
+      { 
+        date: "14 Oct 2026", 
+        reading: "128/82 mmHg", 
+        hospital: "Fortis Escorts Heart Institute", 
+        status: "Slightly Elevated",
+        variance: "+8 Systolic / +2 Diastolic",
+        varianceLabel: "8 points higher systolic, 2 points higher diastolic than 120/80",
+        varianceType: "higher"
+      },
+      { 
+        date: "18 Nov 2025", 
+        reading: "130/84 mmHg", 
+        hospital: "Max Super Speciality Hospital", 
+        status: "Pre-Hypertension",
+        variance: "+10 Systolic / +4 Diastolic",
+        varianceLabel: "10 points higher systolic, 4 points higher diastolic than 120/80",
+        varianceType: "higher"
+      },
+      { 
+        date: "04 Feb 2024", 
+        reading: "126/80 mmHg", 
+        hospital: "AIIMS New Delhi", 
+        status: "Borderline",
+        variance: "+6 Systolic / 0 Diastolic",
+        varianceLabel: "6 points higher systolic, normal diastolic compared to 120/80",
+        varianceType: "higher"
+      }
     ]
   },
   "Blood Sugar": {
     unit: "mg/dL",
+    normalRange: "70 – 99 mg/dL (Fasting)",
+    normalDescription: "Normal fasting blood sugar should be 70 to 99 mg/dL. Values between 100 and 125 mg/dL indicate pre-diabetes.",
     records: [
-      { date: "22 Sep 2026", reading: "108 mg/dL (Fasting)", hospital: "Jan Seva Health Kendra", status: "Borderline" },
-      { date: "18 Nov 2025", reading: "102 mg/dL (Fasting)", hospital: "Max Super Speciality Hospital", status: "Normal" },
-      { date: "28 Aug 2023", reading: "98 mg/dL (Random)", hospital: "Jan Seva Health Kendra", status: "Normal" }
+      { 
+        date: "22 Sep 2026", 
+        reading: "108 mg/dL (Fasting)", 
+        hospital: "Jan Seva Health Kendra", 
+        status: "Borderline High",
+        variance: "+9 mg/dL higher",
+        varianceLabel: "9 mg/dL more than normal upper limit (99 mg/dL)",
+        varianceType: "higher"
+      },
+      { 
+        date: "18 Nov 2025", 
+        reading: "102 mg/dL (Fasting)", 
+        hospital: "Max Super Speciality Hospital", 
+        status: "Slightly High",
+        variance: "+3 mg/dL higher",
+        varianceLabel: "3 mg/dL more than normal upper limit (99 mg/dL)",
+        varianceType: "higher"
+      },
+      { 
+        date: "28 Aug 2023", 
+        reading: "98 mg/dL (Random)", 
+        hospital: "Jan Seva Health Kendra", 
+        status: "Normal",
+        variance: "Within Normal Range",
+        varianceLabel: "Optimal (1 mg/dL below upper threshold of 99 mg/dL)",
+        varianceType: "normal"
+      }
     ]
   },
   "Heart Rate": {
     unit: "bpm",
+    normalRange: "60 – 100 bpm",
+    normalDescription: "Normal resting heart rate for adults is 60 to 100 beats per minute.",
     records: [
-      { date: "14 Oct 2026", reading: "72 bpm", hospital: "Fortis Escorts Heart Institute", status: "Normal" },
-      { date: "18 Nov 2025", reading: "76 bpm", hospital: "Max Super Speciality Hospital", status: "Normal" },
-      { date: "04 Feb 2024", reading: "70 bpm", hospital: "Fortis Escorts Heart Institute", status: "Normal" }
+      { 
+        date: "14 Oct 2026", 
+        reading: "72 bpm", 
+        hospital: "Fortis Escorts Heart Institute", 
+        status: "Normal",
+        variance: "Within Normal Range",
+        varianceLabel: "Optimal resting pulse (Target 60–100 bpm)",
+        varianceType: "normal"
+      },
+      { 
+        date: "18 Nov 2025", 
+        reading: "76 bpm", 
+        hospital: "Max Super Speciality Hospital", 
+        status: "Normal",
+        variance: "Within Normal Range",
+        varianceLabel: "Normal resting rate (Target 60–100 bpm)",
+        varianceType: "normal"
+      },
+      { 
+        date: "04 Feb 2024", 
+        reading: "70 bpm", 
+        hospital: "Fortis Escorts Heart Institute", 
+        status: "Normal",
+        variance: "Within Normal Range",
+        varianceLabel: "Healthy calm pulse (Target 60–100 bpm)",
+        varianceType: "normal"
+      }
     ]
   },
   "SpO₂": {
     unit: "%",
+    normalRange: "95% – 100%",
+    normalDescription: "Healthy oxygen saturation is 95% or higher on normal room air.",
     records: [
-      { date: "10 Oct 2026", reading: "99%", hospital: "AIIMS New Delhi", status: "Optimal" },
-      { date: "28 Aug 2023", reading: "97%", hospital: "Jan Seva Health Kendra", status: "Normal" },
-      { date: "15 Jan 2022", reading: "98% on room air", hospital: "AIIMS New Delhi", status: "Normal" }
+      { 
+        date: "10 Oct 2026", 
+        reading: "99%", 
+        hospital: "AIIMS New Delhi", 
+        status: "Optimal",
+        variance: "+4% above safe min",
+        varianceLabel: "4% higher than the safe minimum threshold (95%)",
+        varianceType: "normal"
+      },
+      { 
+        date: "28 Aug 2023", 
+        reading: "97%", 
+        hospital: "Jan Seva Health Kendra", 
+        status: "Normal",
+        variance: "+2% above safe min",
+        varianceLabel: "2% higher than the safe minimum threshold (95%)",
+        varianceType: "normal"
+      },
+      { 
+        date: "15 Jan 2022", 
+        reading: "98% on room air", 
+        hospital: "AIIMS New Delhi", 
+        status: "Normal",
+        variance: "+3% above safe min",
+        varianceLabel: "3% higher than the safe minimum threshold (95%)",
+        varianceType: "normal"
+      }
     ]
   },
   "Body Temperature": {
     unit: "°F",
+    normalRange: "97.8°F – 99.0°F (Avg: 98.6°F)",
+    normalDescription: "Average baseline body temperature is 98.6°F. Any reading over 100.4°F indicates a fever.",
     records: [
-      { date: "10 Oct 2026", reading: "98.4 °F", hospital: "AIIMS New Delhi", status: "Normal" },
-      { date: "28 Aug 2023", reading: "101.2 °F", hospital: "Jan Seva Health Kendra", status: "Febrile" },
-      { date: "10 Nov 2020", reading: "98.6 °F", hospital: "Jan Seva Health Kendra", status: "Normal" }
+      { 
+        date: "10 Oct 2026", 
+        reading: "98.4 °F", 
+        hospital: "AIIMS New Delhi", 
+        status: "Normal",
+        variance: "-0.2 °F from baseline",
+        varianceLabel: "0.2 °F lower than standard 98.6 °F (Healthy normal)",
+        varianceType: "normal"
+      },
+      { 
+        date: "28 Aug 2023", 
+        reading: "101.2 °F", 
+        hospital: "Jan Seva Health Kendra", 
+        status: "Fever / Febrile",
+        variance: "+2.6 °F higher",
+        varianceLabel: "2.6 °F higher than normal 98.6 °F (Pyrexia recorded)",
+        varianceType: "higher"
+      },
+      { 
+        date: "10 Nov 2020", 
+        reading: "98.6 °F", 
+        hospital: "Jan Seva Health Kendra", 
+        status: "Exact Baseline",
+        variance: "0.0 °F difference",
+        varianceLabel: "Exact standard baseline of 98.6 °F",
+        varianceType: "normal"
+      }
     ]
   },
   "Weight": {
     unit: "kg",
+    normalRange: "65 – 70 kg",
+    normalDescription: "Healthy target weight range based on patient height and age is 65 to 70 kg.",
     records: [
-      { date: "14 Oct 2026", reading: "72.5 kg", hospital: "Fortis Escorts Heart Institute", status: "Stable" },
-      { date: "18 Nov 2025", reading: "73.8 kg", hospital: "Max Super Speciality Hospital", status: "Stable" },
-      { date: "14 Apr 2021", reading: "75.2 kg", hospital: "Max Super Speciality Hospital", status: "Initial" }
+      { 
+        date: "14 Oct 2026", 
+        reading: "72.5 kg", 
+        hospital: "Fortis Escorts Heart Institute", 
+        status: "Slightly Over Target",
+        variance: "+2.5 kg higher",
+        varianceLabel: "2.5 kg more than healthy upper target (70 kg)",
+        varianceType: "higher"
+      },
+      { 
+        date: "18 Nov 2025", 
+        reading: "73.8 kg", 
+        hospital: "Max Super Speciality Hospital", 
+        status: "Over Target",
+        variance: "+3.8 kg higher",
+        varianceLabel: "3.8 kg more than healthy upper target (70 kg)",
+        varianceType: "higher"
+      },
+      { 
+        date: "14 Apr 2021", 
+        reading: "75.2 kg", 
+        hospital: "Max Super Speciality Hospital", 
+        status: "Over Target",
+        variance: "+5.2 kg higher",
+        varianceLabel: "5.2 kg more than healthy upper target (70 kg)",
+        varianceType: "higher"
+      }
     ]
   },
   "Haemoglobin": {
     unit: "g/dL",
+    normalRange: "13.5 – 17.5 g/dL",
+    normalDescription: "Standard normal haemoglobin level for adult males is 13.5 to 17.5 g/dL.",
     records: [
-      { date: "10 Oct 2026", reading: "14.2 g/dL", hospital: "AIIMS New Delhi", status: "Normal" },
-      { date: "18 Nov 2025", reading: "13.9 g/dL", hospital: "Max Super Speciality Hospital", status: "Normal" },
-      { date: "10 Nov 2020", reading: "14.0 g/dL", hospital: "Jan Seva Health Kendra", status: "Normal" }
+      { 
+        date: "10 Oct 2026", 
+        reading: "14.2 g/dL", 
+        hospital: "AIIMS New Delhi", 
+        status: "Normal",
+        variance: "+0.7 g/dL above min",
+        varianceLabel: "Normal healthy range (0.7 g/dL above lower limit 13.5)",
+        varianceType: "normal"
+      },
+      { 
+        date: "18 Nov 2025", 
+        reading: "13.9 g/dL", 
+        hospital: "Max Super Speciality Hospital", 
+        status: "Normal",
+        variance: "+0.4 g/dL above min",
+        varianceLabel: "Normal healthy range (0.4 g/dL above lower limit 13.5)",
+        varianceType: "normal"
+      },
+      { 
+        date: "10 Nov 2020", 
+        reading: "14.0 g/dL", 
+        hospital: "Jan Seva Health Kendra", 
+        status: "Normal",
+        variance: "+0.5 g/dL above min",
+        varianceLabel: "Normal healthy range (0.5 g/dL above lower limit 13.5)",
+        varianceType: "normal"
+      }
     ]
   }
 };
+
 
