@@ -6,6 +6,7 @@
     "dev": "npm run dev --prefix Citizen",
     "dev:citizen": "npm run dev --prefix Citizen",
     "dev:hospital": "npm run dev --prefix Hospital",
+    "dev:doctor": "npm run dev --prefix Doctor",
     "build": "npm run build --prefix Citizen",
     "build:hospital": "npm run build --prefix Hospital",
     "start": "npm run start --prefix Citizen"

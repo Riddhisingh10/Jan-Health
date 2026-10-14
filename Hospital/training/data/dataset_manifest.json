@@ -1,0 +1,29 @@
+{
+  "dataset_name": "JAN_HEALTH_MULTI_TASK_CLINICAL_V2",
+  "total_samples": 500,
+  "split": {
+    "train": 400,
+    "val": 50,
+    "test": 50
+  },
+  "tasks": {
+    "extraction": 200,
+    "triage_severity": 120,
+    "biomarker_forecast": 120,
+    "explainer": 60
+  },
+  "pdf_sources": [
+    "Patient Dundamma Discharge Summary.pdf",
+    "PATIENT SHILPA Discharge Summary.pdf",
+    "13.pdf (Gayathri)",
+    "Discharge Summary10.pdf (Kalanithi)",
+    "Discharge Summary8.pdf (Bhagyalakshmi)",
+    "11.pdf (Basavaraj)",
+    "Discharge Summary PT MAHENDRA.pdf",
+    "12.pdf (Jayalakshmi)",
+    "pt kotla Discharge Summary.pdf",
+    "ANIKET Discharge Summary.pdf",
+    "Discharge Summary (2).pdf",
+    "Untitled document (1).pdf"
+  ]
+}
