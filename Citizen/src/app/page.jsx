@@ -33,9 +33,9 @@ import {
   HEALTH_HISTORY_METRICS 
 } from '../data/mockData';
 
-import { Auth } from '../components/Auth';
 import { RecordDetailModal } from '../components/RecordDetailModal';
 import { DoctorAccessModal } from '../components/DoctorAccessModal';
+import { AIChatbot } from '../components/AIChatbot';
 
 export default function CitizensDashboardPage() {
   // Citizen session
@@ -136,34 +136,23 @@ export default function CitizensDashboardPage() {
       : MEDICAL_RECORDS.filter(r => r.year === selectedYear).length;
   }, [selectedYear]);
 
-  // If user is logged out, show the simple ABHA login/register screen
-  if (!user) {
-    return (
-      <div style={{ background: '#f1f5f9', minHeight: '100vh' }}>
-        <Auth 
-          onLoginSuccess={(loggedInUser) => setUser(loggedInUser)} 
-          language={language}
-          setLanguage={setLanguage}
-        />
-      </div>
-    );
-  }
+
 
   return (
     <div style={{ background: '#f8fafc', minHeight: '100vh', paddingBottom: '70px' }}>
       
       {/* Top Calming Teal Navigation Header */}
-      <header style={{ background: 'linear-gradient(135deg, #0d5c58 0%, #0f766e 60%, #14b8a6 100%)', color: '#ffffff', padding: '24px 20px 28px', borderBottomLeftRadius: '28px', borderBottomRightRadius: '28px', boxShadow: '0 8px 24px rgba(15, 118, 110, 0.15)' }}>
-        <div style={{ maxWidth: '680px', margin: '0 auto' }}>
+      <header style={{ background: 'linear-gradient(135deg, #0d5c58 0%, #0f766e 60%, #14b8a6 100%)', color: '#ffffff', padding: '24px 20px 32px', borderBottomLeftRadius: '28px', borderBottomRightRadius: '28px', boxShadow: '0 8px 24px rgba(15, 118, 110, 0.15)' }}>
+        <div className="portal-desktop-container">
           
           {/* Top Bar with Brand & Actions */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <div style={{ width: '36px', height: '36px', borderRadius: '12px', background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', border: '1px solid rgba(255,255,255,0.3)' }}>
-                <Activity size={20} />
+              <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', border: '1px solid rgba(255,255,255,0.3)' }}>
+                <Activity size={22} />
               </div>
               <div>
-                <h1 style={{ fontSize: '18px', fontWeight: '800', lineHeight: '1.1' }}>
+                <h1 style={{ fontSize: '19px', fontWeight: '800', lineHeight: '1.1' }}>
                   Jan Health
                 </h1>
                 <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.85)' }}>
@@ -172,111 +161,219 @@ export default function CitizensDashboardPage() {
               </div>
             </div>
 
-            {/* Health History Sidebar Trigger, Language & Logout Controls */}
-            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+            {/* Health History Sidebar Trigger, Hospital Switcher, Language & Logout Controls */}
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+              <a
+                href="http://localhost:3001"
+                target="_self"
+                rel="noreferrer"
+                title="Go to Hospital Clinical Dashboard (Port 3001)"
+                style={{
+                  background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
+                  border: '1.5px solid rgba(56, 189, 248, 0.4)',
+                  color: '#ffffff',
+                  padding: '6px 14px',
+                  borderRadius: '16px',
+                  fontSize: '12px',
+                  fontWeight: '800',
+                  textDecoration: 'none',
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+                }}
+              >
+                <Hospital size={14} color="#38bdf8" />
+                <span style={{ color: '#38bdf8' }}>Hospital Dashboard (3001)</span>
+                <span style={{ fontSize: '11px', opacity: 0.8 }}>↗</span>
+              </a>
+
               <button
                 onClick={() => setSidebarOpen(true)}
                 title="Open Health History Sidebar"
-                style={{ background: 'rgba(255,255,255,0.22)', border: '1px solid rgba(255,255,255,0.35)', color: '#fff', padding: '5px 12px', borderRadius: '16px', fontSize: '12px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }}
+                style={{ background: 'rgba(255,255,255,0.22)', border: '1px solid rgba(255,255,255,0.35)', color: '#fff', padding: '6px 14px', borderRadius: '16px', fontSize: '12px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
               >
-                <Menu size={13} />
+                <Menu size={14} />
                 <span>Health History</span>
               </button>
               <button
                 onClick={() => setLanguage(language === 'en' ? 'hi' : 'en')}
-                style={{ background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.3)', color: '#fff', padding: '5px 10px', borderRadius: '16px', fontSize: '12px', fontWeight: '700', cursor: 'pointer' }}
+                style={{ background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.3)', color: '#fff', padding: '6px 12px', borderRadius: '16px', fontSize: '12px', fontWeight: '700', cursor: 'pointer' }}
               >
                 {language === 'en' ? 'हिन्दी' : 'English'}
               </button>
               <button
-                onClick={() => setUser(null)}
-                title="Log out"
-                style={{ background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.3)', color: '#fff', padding: '5px 10px', borderRadius: '16px', fontSize: '12px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
+                onClick={() => { setSelectedYear('All'); setSelectedHospital('All'); setSearchQuery(''); }}
+                title="Reset Filters"
+                style={{ background: 'rgba(255,255,255,0.18)', border: '1px solid rgba(255,255,255,0.3)', color: '#fff', padding: '6px 12px', borderRadius: '16px', fontSize: '12px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
               >
-                <LogOut size={13} />
-                <span>{language === 'hi' ? 'लॉगआउट' : 'Exit'}</span>
+                <span>{language === 'hi' ? 'रीसेट' : 'Reset'}</span>
               </button>
             </div>
           </div>
 
-          {/* Citizen Profile Card */}
-          <div style={{ background: 'rgba(255, 255, 255, 0.15)', backdropFilter: 'blur(8px)', borderRadius: '20px', padding: '16px', border: '1px solid rgba(255, 255, 255, 0.25)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#ffffff', color: 'var(--primary-teal)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', fontSize: '18px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
-                {user.name.charAt(0)}
-              </div>
-              <div>
-                <h2 style={{ fontSize: '16px', fontWeight: '800', lineHeight: '1.2' }}>
-                  {language === 'hi' && user.nameHindi ? user.nameHindi : user.name}
-                </h2>
-                <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.95)', marginTop: '2px' }}>
-                  ABHA: <strong>{user.abhaNumber || '14-8492-3847-1920'}</strong>
+          {/* Citizen Profile Card (Responsive Desktop Grid & Mobile Stack) */}
+          <div style={{ background: 'rgba(255, 255, 255, 0.15)', backdropFilter: 'blur(8px)', borderRadius: '22px', padding: '18px 22px', border: '1px solid rgba(255, 255, 255, 0.25)' }}>
+            <div className="header-profile-row">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                <div style={{ width: '52px', height: '52px', borderRadius: '50%', background: '#ffffff', color: 'var(--primary-teal)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', fontSize: '20px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', flexShrink: 0 }}>
+                  {user.name.charAt(0)}
                 </div>
-                <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.85)' }}>
-                  {user.abhaAddress || 'ramesh.sharma@abdm'} • Registered Since {user.registeredYear}
+                <div>
+                  <h2 style={{ fontSize: '18px', fontWeight: '800', lineHeight: '1.2' }}>
+                    {language === 'hi' && user.nameHindi ? user.nameHindi : user.name}
+                  </h2>
+                  <div style={{ fontSize: '12.5px', color: 'rgba(255,255,255,0.95)', marginTop: '2px' }}>
+                    ABHA: <strong>{user.abhaNumber || '14-8492-3847-1920'}</strong> • <span style={{ opacity: 0.9 }}>{user.age || 52} Y / {user.gender || 'Male'} • Blood: {user.bloodGroup || 'B+'}</span>
+                  </div>
+                  <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.85)' }}>
+                    {user.abhaAddress || 'ramesh.sharma@abdm'} • Registered Since {user.registeredYear}
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div style={{ textAlign: 'right' }}>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', background: '#dcfce7', color: '#166534', fontSize: '11px', fontWeight: '700', padding: '3px 8px', borderRadius: '12px' }}>
-                <CheckCircle2 size={12} />
-                ABHA Active
-              </span>
+              <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', background: '#dcfce7', color: '#166534', fontSize: '11.5px', fontWeight: '800', padding: '4px 10px', borderRadius: '14px' }}>
+                  <CheckCircle2 size={13} />
+                  ABHA Active
+                </span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', background: 'rgba(255,255,255,0.2)', color: '#ffffff', fontSize: '11px', fontWeight: '700', padding: '4px 10px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.25)' }}>
+                  <FileText size={12} />
+                  {MEDICAL_RECORDS.length} Records
+                </span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', background: 'rgba(255,255,255,0.2)', color: '#ffffff', fontSize: '11px', fontWeight: '700', padding: '4px 10px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.25)' }}>
+                  <Building2 size={12} />
+                  5 Visited Hospitals
+                </span>
+              </div>
             </div>
           </div>
 
         </div>
       </header>
 
-      {/* Main Content Area */}
-      <main style={{ maxWidth: '680px', margin: '-16px auto 0', padding: '0 16px' }}>
+      {/* Main Content Area: Responsive Desktop & Phone Container */}
+      <main className="portal-desktop-container" style={{ marginTop: '-20px' }}>
 
-        {/* Doctor PIN Hero Card */}
-        <section style={{ background: '#ffffff', borderRadius: '24px', padding: '18px', boxShadow: '0 8px 24px rgba(15, 118, 110, 0.12)', border: '1.5px solid #ccfbf1', marginBottom: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px' }}>
+        {/* HERO DECK: 2 Columns on Desktop, 1 Column on Mobile */}
+        <div className="portal-hero-deck">
+          {/* Card 1: Doctor PIN Hero Card */}
+          <section style={{ background: '#ffffff', borderRadius: '24px', padding: '20px', boxShadow: '0 8px 24px rgba(15, 118, 110, 0.1)', border: '1.5px solid #ccfbf1', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
             <div>
-              <span style={{ fontSize: '11px', fontWeight: '800', color: 'var(--primary-teal)', textTransform: 'uppercase', letterSpacing: '0.5px', background: 'var(--primary-teal-surface)', padding: '3px 8px', borderRadius: '10px' }}>
-                {language === 'hi' ? 'दूसरे अस्पताल में डॉक्टर को दिखाएं' : 'Visiting Another Hospital?'}
-              </span>
-              <h3 style={{ fontSize: '16px', fontWeight: '800', color: 'var(--text-main)', marginTop: '6px' }}>
-                {language === 'hi' ? 'किसी भी नए डॉक्टर को अपने विज़िट किए गए अस्पतालों की हिस्ट्री दें' : 'Give Doctor Access to Past Medical History'}
-              </h3>
-              <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px', lineHeight: '1.4' }}>
-                {language === 'hi'
-                  ? 'नए अस्पताल का डॉक्टर आपका ABHA नंबर व 4-अंकीय PIN डालकर आपके सभी विज़िट किए गए अस्पतालों के 2020-2026 के रिकॉर्ड देख सकता है।'
-                  : 'A doctor at any new clinic enters your ABHA Number & PIN to review your previous treatment history across all hospitals you visited (2020 – 2026).'}
-              </p>
-            </div>
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px' }}>
+                <div>
+                  <span style={{ fontSize: '11px', fontWeight: '800', color: 'var(--primary-teal)', textTransform: 'uppercase', letterSpacing: '0.5px', background: 'var(--primary-teal-surface)', padding: '3px 8px', borderRadius: '10px' }}>
+                    {language === 'hi' ? 'दूसरे अस्पताल में डॉक्टर को दिखाएं' : 'Visiting Another Hospital?'}
+                  </span>
+                  <h3 style={{ fontSize: '16px', fontWeight: '800', color: 'var(--text-main)', marginTop: '8px' }}>
+                    {language === 'hi' ? 'किसी भी नए डॉक्टर को अपने विज़िट किए गए अस्पतालों की हिस्ट्री दें' : 'Give Doctor Access to Past Medical History'}
+                  </h3>
+                  <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px', lineHeight: '1.4' }}>
+                    {language === 'hi'
+                      ? 'नए अस्पताल का डॉक्टर आपका ABHA नंबर व 4-अंकीय PIN डालकर आपके सभी विज़िट किए गए अस्पतालों के 2020-2026 के रिकॉर्ड देख सकता है।'
+                      : 'Doctors at AIIMS, Fortis, Max, or Jan Seva enter your ABHA & PIN to review your complete records.'}
+                  </p>
+                </div>
 
-            <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'var(--primary-teal-surface)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary-teal)', flexShrink: 0 }}>
-              <QrCode size={26} />
-            </div>
-          </div>
-
-          <div style={{ marginTop: '14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#f8fafc', padding: '10px 14px', borderRadius: '16px', border: '1px dashed #cbd5e1' }}>
-            <div>
-              <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-                {language === 'hi' ? 'डॉक्टर एक्सेस पिन:' : 'Doctor Access PIN:'}
-              </span>
-              <div style={{ fontSize: '22px', fontWeight: '800', color: 'var(--primary-teal-darker)', letterSpacing: '3px' }}>
-                {user.doctorPin || '8492'}
+                <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'var(--primary-teal-surface)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary-teal)', flexShrink: 0 }}>
+                  <QrCode size={26} />
+                </div>
               </div>
             </div>
 
-            <button
-              className="btn-primary"
-              onClick={() => setShowDoctorPinModal(true)}
-              style={{ padding: '10px 16px', borderRadius: '20px', fontSize: '13px' }}
-            >
-              <Share2 size={15} />
-              <span>{language === 'hi' ? 'पिन / QR कोड खोलें' : 'Show PIN / QR Code'}</span>
-            </button>
-          </div>
-        </section>
+            <div style={{ marginTop: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#f8fafc', padding: '10px 14px', borderRadius: '16px', border: '1px dashed #cbd5e1', flexWrap: 'wrap', gap: '10px' }}>
+              <div>
+                <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                  {language === 'hi' ? 'डॉक्टर एक्सेस पिन:' : 'Doctor Access PIN:'}
+                </span>
+                <div style={{ fontSize: '22px', fontWeight: '800', color: 'var(--primary-teal-darker)', letterSpacing: '3px' }}>
+                  {user.doctorPin || '8492'}
+                </div>
+              </div>
+
+              <button
+                className="btn-primary"
+                onClick={() => setShowDoctorPinModal(true)}
+                style={{ padding: '9px 16px', borderRadius: '18px', fontSize: '12.5px' }}
+              >
+                <Share2 size={14} />
+                <span>{language === 'hi' ? 'पिन / QR कोड खोलें' : 'Show PIN / QR Code'}</span>
+              </button>
+            </div>
+          </section>
+
+          {/* Card 2: Live Vitals Snapshot Card */}
+          <section style={{ background: '#ffffff', borderRadius: '24px', padding: '20px', boxShadow: '0 8px 24px rgba(15, 118, 110, 0.1)', border: '1.5px solid #e2e8f0', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <span style={{ fontSize: '11px', fontWeight: '800', color: '#166534', textTransform: 'uppercase', letterSpacing: '0.5px', background: '#dcfce7', padding: '3px 8px', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <Activity size={12} />
+                  <span>{language === 'hi' ? 'सक्रिय वाइटल्स सारांश' : 'Live Vitals Snapshot'}</span>
+                </span>
+                <button
+                  onClick={() => setSidebarOpen(true)}
+                  style={{ border: 'none', background: 'transparent', color: 'var(--primary-teal)', fontSize: '11.5px', fontWeight: '800', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '3px' }}
+                >
+                  <span>{language === 'hi' ? 'विस्तृत इतिहास' : 'View Full History'}</span>
+                  <ChevronRight size={13} />
+                </button>
+              </div>
+
+              <h3 style={{ fontSize: '16px', fontWeight: '800', color: 'var(--text-main)', marginTop: '4px' }}>
+                {language === 'hi' ? 'रोगी के प्रमुख स्वास्थ्य संकेतक (2020-2026)' : 'Key Biometric Indicators & Trends'}
+              </h3>
+              <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px', lineHeight: '1.4' }}>
+                {language === 'hi'
+                  ? 'अस्पतालों से सत्यापित नवीनतम टेस्ट व वाइटल रीडिंग्स।'
+                  : 'Verified hospital readings across Fortis, Max, AIIMS & Jan Seva Kendra.'}
+              </p>
+
+              {/* 4 Vitals Tiles Grid */}
+              <div className="vitals-snapshot-grid" style={{ marginTop: '14px' }}>
+                <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '10px 12px' }}>
+                  <div style={{ fontSize: '10.5px', color: 'var(--text-muted)', fontWeight: '700' }}>Blood Pressure</div>
+                  <div style={{ fontSize: '15px', fontWeight: '800', color: 'var(--primary-teal-darker)', marginTop: '2px' }}>128/82</div>
+                  <div style={{ fontSize: '9.5px', color: '#166534', fontWeight: '700', marginTop: '2px' }}>✓ Controlled</div>
+                </div>
+
+                <div style={{ background: '#fef2f2', border: '1px solid #fee2e2', borderRadius: '14px', padding: '10px 12px' }}>
+                  <div style={{ fontSize: '10.5px', color: '#991b1b', fontWeight: '700' }}>Blood Sugar</div>
+                  <div style={{ fontSize: '15px', fontWeight: '800', color: '#b91c1c', marginTop: '2px' }}>108 mg/dL</div>
+                  <div style={{ fontSize: '9.5px', color: '#b91c1c', fontWeight: '700', marginTop: '2px' }}>▲ Pre-Diabetic</div>
+                </div>
+
+                <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '10px 12px' }}>
+                  <div style={{ fontSize: '10.5px', color: 'var(--text-muted)', fontWeight: '700' }}>Heart Rate</div>
+                  <div style={{ fontSize: '15px', fontWeight: '800', color: 'var(--primary-teal-darker)', marginTop: '2px' }}>72 bpm</div>
+                  <div style={{ fontSize: '9.5px', color: '#166534', fontWeight: '700', marginTop: '2px' }}>✓ Optimal</div>
+                </div>
+
+                <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '14px', padding: '10px 12px' }}>
+                  <div style={{ fontSize: '10.5px', color: '#166534', fontWeight: '700' }}>Weight</div>
+                  <div style={{ fontSize: '15px', fontWeight: '800', color: '#166534', marginTop: '2px' }}>72.5 kg</div>
+                  <div style={{ fontSize: '9.5px', color: '#166534', fontWeight: '700', marginTop: '2px' }}>📉 -2.7 kg Loss</div>
+                </div>
+              </div>
+            </div>
+
+            <div style={{ marginTop: '14px', paddingTop: '10px', borderTop: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontSize: '11px', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <ShieldCheck size={13} color="var(--primary-teal)" />
+                <span>Verified clinical laboratory data</span>
+              </span>
+              <button
+                onClick={() => setSidebarOpen(true)}
+                style={{ background: 'var(--primary-teal-surface)', color: 'var(--primary-teal-darker)', border: '1px solid #99f6e4', padding: '6px 12px', borderRadius: '12px', fontSize: '11.5px', fontWeight: '700', cursor: 'pointer' }}
+              >
+                {language === 'hi' ? 'सभी 7 वाइटल्स देखें' : 'View All 7 Vitals'}
+              </button>
+            </div>
+          </section>
+        </div>
 
         {/* STRUCTURED CONTROLS: Yearly Filter & Visited Hospitals */}
-        <section style={{ background: '#ffffff', borderRadius: '20px', padding: '16px', border: '1px solid #e2e8f0', boxShadow: '0 4px 14px rgba(0,0,0,0.03)', marginBottom: '18px' }}>
+        <section style={{ background: '#ffffff', borderRadius: '20px', padding: '18px 20px', border: '1px solid #e2e8f0', boxShadow: '0 4px 14px rgba(0,0,0,0.03)', marginBottom: '20px' }}>
           
           {/* Header Row: Filters Title & View Mode Toggle */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
@@ -342,7 +439,7 @@ export default function CitizensDashboardPage() {
             </div>
 
             {/* Horizontal Year Chips Strip */}
-            <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', padding: '2px 0 4px', scrollbarWidth: 'none' }}>
+            <div className="filter-chips-scroll">
               {YEARS_LIST.map(yr => {
                 const isSelected = selectedYear === yr;
                 const count = countByYear[yr] || 0;
@@ -352,7 +449,7 @@ export default function CitizensDashboardPage() {
                     key={yr}
                     onClick={() => handleYearChange(yr)}
                     style={{
-                      padding: '7px 12px',
+                      padding: '7px 14px',
                       borderRadius: '14px',
                       border: '1.5px solid',
                       borderColor: isSelected ? 'var(--primary-teal)' : '#e2e8f0',
@@ -404,7 +501,7 @@ export default function CitizensDashboardPage() {
             </div>
 
             {/* Hospital Chips - ONLY THE HOSPITALS THE PATIENT ACTUALLY VISITED */}
-            <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', padding: '2px 0 4px', scrollbarWidth: 'none' }}>
+            <div className="filter-chips-scroll">
               {/* All Visited Hospitals Button */}
               <button
                 onClick={() => setSelectedHospital('All')}
@@ -474,7 +571,7 @@ export default function CitizensDashboardPage() {
           </div>
 
           {/* Search Box */}
-          <div style={{ position: 'relative', marginTop: '12px' }}>
+          <div style={{ position: 'relative', marginTop: '14px' }}>
             <input
               type="text"
               className="form-input"
@@ -497,12 +594,12 @@ export default function CitizensDashboardPage() {
         </section>
 
         {/* RESULTS HEADER */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
           <div>
-            <h2 style={{ fontSize: '17px', fontWeight: '800', color: 'var(--text-main)' }}>
+            <h2 style={{ fontSize: '18px', fontWeight: '800', color: 'var(--text-main)' }}>
               {language === 'hi' ? 'विज़िट किए गए अस्पतालों के रिकॉर्ड' : 'Visited Hospital Records'}
             </h2>
-            <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+            <span style={{ fontSize: '12.5px', color: 'var(--text-muted)' }}>
               Showing {filteredRecords.length} records 
               {selectedYear !== 'All' ? ` for Year ${selectedYear}` : ' (2020–2026)'}
               {selectedHospital !== 'All' ? ` • ${selectedHospital}` : ''}
@@ -512,7 +609,7 @@ export default function CitizensDashboardPage() {
           {(selectedYear !== 'All' || selectedHospital !== 'All' || searchQuery) && (
             <button
               onClick={() => { setSelectedYear('All'); setSelectedHospital('All'); setSearchQuery(''); }}
-              style={{ border: 'none', background: '#f1f5f9', color: 'var(--primary-teal)', fontSize: '11px', fontWeight: '700', padding: '4px 10px', borderRadius: '10px', cursor: 'pointer' }}
+              style={{ border: 'none', background: '#f1f5f9', color: 'var(--primary-teal)', fontSize: '11px', fontWeight: '700', padding: '5px 12px', borderRadius: '12px', cursor: 'pointer' }}
             >
               Reset Filters
             </button>
@@ -522,56 +619,56 @@ export default function CitizensDashboardPage() {
         {/* VIEW 1: GROUPED BY VISITED HOSPITAL */}
         {viewGrouping === 'hospital' ? (
           Object.keys(recordsByHospital).length > 0 ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               {Object.entries(recordsByHospital).map(([hospitalName, hospitalRecords]) => (
                 <div 
                   key={hospitalName}
                   style={{
                     background: '#ffffff',
-                    borderRadius: '20px',
+                    borderRadius: '22px',
                     border: '1px solid #e2e8f0',
                     overflow: 'hidden',
                     boxShadow: '0 4px 16px rgba(0,0,0,0.03)'
                   }}
                 >
                   {/* Hospital Card Header */}
-                  <div style={{ background: '#f8fafc', padding: '14px 16px', borderBottom: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ background: '#f8fafc', padding: '14px 18px', borderBottom: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: 'var(--primary-teal-surface)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary-teal)' }}>
+                      <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'var(--primary-teal-surface)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary-teal)' }}>
                         <Building2 size={20} />
                       </div>
                       <div>
-                        <h3 style={{ fontSize: '15px', fontWeight: '800', color: 'var(--text-main)' }}>
+                        <h3 style={{ fontSize: '15.5px', fontWeight: '800', color: 'var(--text-main)' }}>
                           {hospitalName}
                         </h3>
-                        <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                        <span style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>
                           {hospitalRecords.length} visit record{hospitalRecords.length > 1 ? 's' : ''} on file
                         </span>
                       </div>
                     </div>
 
-                    <span style={{ fontSize: '11px', fontWeight: '700', background: '#dcfce7', color: '#166534', padding: '3px 8px', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '3px' }}>
-                      <CheckCircle2 size={11} />
+                    <span style={{ fontSize: '11.5px', fontWeight: '700', background: '#dcfce7', color: '#166534', padding: '4px 10px', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <CheckCircle2 size={12} />
                       Visited Facility
                     </span>
                   </div>
 
-                  {/* List of records uploaded by this hospital */}
-                  <div style={{ padding: '8px 14px 14px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {/* List of records uploaded by this hospital (Responsive 2-column grid on desktop, 1-column on mobile) */}
+                  <div className="records-responsive-grid" style={{ padding: '16px' }}>
                     {hospitalRecords.map(rec => (
                       <div
                         key={rec.id}
                         onClick={() => setActiveRecord(rec)}
                         style={{
                           background: '#ffffff',
-                          border: '1px solid #f1f5f9',
-                          borderRadius: '14px',
-                          padding: '12px 14px',
+                          border: '1px solid #e2e8f0',
+                          borderRadius: '16px',
+                          padding: '14px 16px',
                           cursor: 'pointer',
                           transition: 'var(--transition-smooth)',
                           display: 'flex',
                           flexDirection: 'column',
-                          gap: '6px'
+                          gap: '8px'
                         }}
                       >
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -579,23 +676,23 @@ export default function CitizensDashboardPage() {
                             <span style={{
                               fontSize: '10px',
                               fontWeight: '800',
-                              padding: '2px 6px',
+                              padding: '2px 7px',
                               borderRadius: '8px',
                               background: rec.type === 'Allergy Alert' ? '#fee2e2' : rec.type === 'Lab Report' ? '#e0f2fe' : '#f0fdf4',
                               color: rec.type === 'Allergy Alert' ? '#b91c1c' : rec.type === 'Lab Report' ? '#0369a1' : '#15803d',
                             }}>
                               {rec.type}
                             </span>
-                            <span style={{ fontSize: '11px', fontWeight: '700', color: 'var(--primary-teal)', background: '#f0fdfa', padding: '1px 6px', borderRadius: '6px' }}>
+                            <span style={{ fontSize: '11px', fontWeight: '700', color: 'var(--primary-teal)', background: '#f0fdfa', padding: '2px 7px', borderRadius: '6px' }}>
                               Year {rec.year}
                             </span>
                           </div>
-                          <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: '600' }}>
+                          <span style={{ fontSize: '11.5px', color: 'var(--text-muted)', fontWeight: '600' }}>
                             {rec.date}
                           </span>
                         </div>
 
-                        <div style={{ fontSize: '14px', fontWeight: '700', color: 'var(--text-main)' }}>
+                        <div style={{ fontSize: '14.5px', fontWeight: '800', color: 'var(--text-main)', lineHeight: '1.3' }}>
                           {language === 'hi' && rec.titleHindi ? rec.titleHindi : rec.title}
                         </div>
 
@@ -603,21 +700,21 @@ export default function CitizensDashboardPage() {
                           Doctor: <strong>{rec.doctor}</strong> ({rec.doctorSpecialty})
                         </div>
 
-                        <div style={{ background: '#f8fafc', padding: '6px 10px', borderRadius: '8px', fontSize: '11px', color: 'var(--text-secondary)', borderLeft: '3px solid var(--primary-teal)' }}>
+                        <div style={{ background: '#f8fafc', padding: '8px 12px', borderRadius: '10px', fontSize: '11.5px', color: 'var(--text-secondary)', borderLeft: '3px solid var(--primary-teal)' }}>
                           <strong>Diagnosis:</strong> {rec.diagnosis}
                         </div>
 
                         {rec.medications && (
-                          <div style={{ fontSize: '11px', color: 'var(--primary-teal-darker)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                            <Pill size={12} color="var(--primary-teal)" />
+                          <div style={{ fontSize: '11.5px', color: 'var(--primary-teal-darker)', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                            <Pill size={13} color="var(--primary-teal)" />
                             <span>Prescribed: {rec.medications.map(m => m.name.split(' ')[0]).join(', ')}</span>
                           </div>
                         )}
 
-                        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', paddingTop: '4px' }}>
-                          <span style={{ fontSize: '11px', fontWeight: '700', color: 'var(--primary-teal)', display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', paddingTop: '6px', borderTop: '1px solid #f1f5f9', marginTop: 'auto' }}>
+                          <span style={{ fontSize: '11.5px', fontWeight: '700', color: 'var(--primary-teal)', display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
                             <span>View Full Report</span>
-                            <ChevronRight size={13} />
+                            <ChevronRight size={14} />
                           </span>
                         </div>
                       </div>
@@ -641,9 +738,9 @@ export default function CitizensDashboardPage() {
             </div>
           )
         ) : (
-          /* VIEW 2: CHRONOLOGICAL TIMELINE (YEAR WISE) */
+          /* VIEW 2: CHRONOLOGICAL TIMELINE (YEAR WISE) (Responsive 2-column grid on desktop, 1-column on mobile) */
           filteredRecords.length > 0 ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div className="records-responsive-grid">
               {filteredRecords.map(rec => (
                 <div
                   key={rec.id}
@@ -1000,6 +1097,16 @@ export default function CitizensDashboardPage() {
           </aside>
         </div>
       )}
+
+      {/* Floating Circular AI Chatbot with Trend Analysis & Doctor Alerts */}
+      <AIChatbot 
+        user={user}
+        medicalRecords={MEDICAL_RECORDS}
+        healthMetrics={HEALTH_HISTORY_METRICS}
+        language={language}
+        onOpenDoctorModal={() => setShowDoctorPinModal(true)}
+        onViewRecord={(record) => setActiveRecord(record)}
+      />
 
     </div>
   );
